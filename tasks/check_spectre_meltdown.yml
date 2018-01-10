@@ -1,0 +1,20 @@
+---
+
+- name: spectre-meltdown-checker script installed
+  copy:
+    src: 'spectre-meltdown-checker.sh'
+    dest: '{{ PROMETHEUS_NODE_EXPORTER_DIRS.PROMETHEUS_BINARIES_DIR }}/spectre-meltdown-checker.sh'
+    mode: 'u+x'
+    owner: '{{ PROMETHEUS_NODE_EXPORTER_USER }}'
+    group: '{{ PROMETHEUS_NODE_EXPORTER_GROUP }}'
+
+- name: Spectre/Meltdown mitigation check scheduled via cron
+  cron:
+    backup: true
+    minute: "*/10"
+    hour: "*"
+    name: 'Check Spectre/Meltdown Mitigation'
+    job: '{{ PROMETHEUS_NODE_EXPORTER_SPECTRE_MELTDOWN_CHECK_COMMAND }}'
+
+- name: Run first Spectre/Meltdown mitigation check
+  shell: '{{ PROMETHEUS_NODE_EXPORTER_SPECTRE_MELTDOWN_CHECK_COMMAND }}'

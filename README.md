@@ -15,15 +15,23 @@ None
 Role Variables
 --------------
 
-| Variable                                      | Required | Default   | Choices     | Comments                                    |
-|-----------------------------------------------|----------|-----------|-------------|---------------------------------------------|
-| PROMETHEUS_NODE_EXPORTER_MONITOR_RAID_STORCLI | no       | false     | true, false | Monitor RAID with StorCLI                   |
-| PROMETHEUS_NODE_EXPORTER_CUSTOM_OPTS          | no       | undefined | string      | Additional options to pass to node_exporter |
+| Variable                                        | Required | Default   | Choices     | Comments                                    |
+|-------------------------------------------------|----------|-----------|-------------|---------------------------------------------|
+| PROMETHEUS_NODE_EXPORTER_MONITOR_RAID_STORCLI   | no       | false     | true, false | Monitor RAID with StorCLI                   |
+| PROMETHEUS_NODE_EXPORTER_CHECK_SPECTRE_MELTDOWN | no       | false     | true, false | Check Spectre/Meltdown mitigation status    |
+| PROMETHEUS_NODE_EXPORTER_CUSTOM_OPTS            | no       | undefined | string      | Additional options to pass to node_exporter |
 
 Dependencies
 ------------
 
 If `PROMETHEUS_NODE_EXPORTER_MONITOR_RAID_STORCLI` is set, storcli must be installed a la https://gitlab.cyverse.org/config-mgmt/ansible-install-storcli
+
+If `PROMETHEUS_NODE_EXPORTER_CHECK_SPECTRE_MELTDOWN` is set, systems will be checked for mitigation of Spectre/Meltdown vulnerabilities via [spectre-meltdown-checker](https://github.com/speed47/spectre-meltdown-checker) and expose the following metrics:
+- CVE-2017-5753
+- CVE-2017-5715
+- CVE-2017-5754
+
+A value of `0` means "not vulnerable", a value of `1` means "vulnerable", and a value of `2` means "unknown".
 
 Example Playbook
 ----------------
